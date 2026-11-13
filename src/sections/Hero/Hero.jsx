@@ -40,7 +40,7 @@ export default function Hero() {
       <ul className="container hero__benefits">
         {BENEFITS.map(({ icon: Icon, title, text }) => (
           <li key={title} className="hero__benefit">
-            <Icon className="hero__benefit-icon" size={32} aria-hidden="true" />
+            <Icon className="hero__benefit-icon" size={28} aria-hidden="true" />
             <h2 className="hero__benefit-title">{title}</h2>
             <p className="hero__benefit-text">{text}</p>
           </li>

@@ -3,11 +3,11 @@
   top: 0;
   z-index: 10;
   background-color: var(--color-white);
-  box-shadow: 0 2px 8px rgba(17, 46, 64, 0.08);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .header__topbar {
-  background-color: var(--color-gray);
+  background-color: var(--color-navy);
   font-size: 0.85rem;
 }
 
@@ -19,7 +19,7 @@
 }
 
 .header__tagline {
-  color: var(--color-green-dark);
+  color: var(--color-green-light);
   font-weight: 600;
 }
 
@@ -33,7 +33,7 @@
   place-items: center;
   width: 28px;
   height: 28px;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: var(--color-green);
   color: var(--color-navy);
   transition: background-color var(--transition);

@@ -1,6 +1,9 @@
+/* Imagen de fondo con una capa azul marino encima para mantener la paleta */
 .hero__banner {
-  padding-block: 4.5rem 7rem;
-  background-color: var(--color-navy);
+  padding-block: 5rem 8rem;
+  background:
+    linear-gradient(135deg, rgba(17, 46, 64, 0.95) 0%, rgba(17, 46, 64, 0.82) 55%, rgba(2, 89, 73, 0.78) 100%),
+    url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1600&q=80&auto=format&fit=crop') center / cover;
   color: var(--color-white);
 }
 
@@ -14,12 +17,15 @@
 
 .hero__title {
   max-width: 18ch;
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  line-height: 1.15;
+  font-size: clamp(2.1rem, 5vw, 3.5rem);
+  line-height: 1.12;
 }
 
 .hero__highlight {
-  color: var(--color-green);
+  background: linear-gradient(90deg, var(--color-green), var(--color-green-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .hero__text {
@@ -31,40 +37,51 @@
 /* Las tarjetas de beneficios se superponen al banner, como en el wireframe */
 .hero__benefits {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
-  margin-top: -4rem;
+  margin-top: -4.5rem;
 }
 
 .hero__benefit {
   padding: 1.75rem 1.5rem;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  background-color: var(--color-green);
+  background-color: var(--color-white);
   box-shadow: var(--shadow);
   text-align: center;
+  transition: transform var(--transition);
+}
+
+.hero__benefit:hover {
+  transform: translateY(-4px);
 }
 
 .hero__benefit-icon {
+  box-sizing: content-box;
   margin-inline: auto;
+  padding: 0.75rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--color-green), var(--color-green-light));
   color: var(--color-navy);
 }
 
 .hero__benefit-title {
-  margin-block: 0.75rem 0.4rem;
+  margin-block: 1rem 0.4rem;
   font-size: 1.15rem;
 }
 
 .hero__benefit-text {
-  color: var(--color-navy);
+  color: var(--color-text-muted);
   font-size: 0.95rem;
 }
 
 @media (max-width: 760px) {
   .hero__banner {
-    padding-block: 3rem 5.5rem;
+    padding-block: 3.5rem 6rem;
   }
 
   .hero__benefits {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }

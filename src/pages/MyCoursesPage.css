@@ -1,0 +1,84 @@
+.my-courses__subtitle {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.my-courses__list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+/* Bloque: enrollment (una inscripción) */
+.enrollment {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-small);
+}
+
+.enrollment--cancelled {
+  opacity: 0.75;
+}
+
+.enrollment__media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-small);
+  background: linear-gradient(135deg, var(--color-navy), var(--color-green-dark));
+  color: var(--color-green-light);
+}
+
+.enrollment__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.enrollment__body {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.enrollment__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.enrollment__title {
+  font-size: 1.05rem;
+}
+
+.enrollment__meta {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.enrollment__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .enrollment {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 0.85rem;
+  }
+
+  .enrollment__actions {
+    grid-column: 1 / -1;
+  }
+
+  .enrollment__actions .button {
+    flex: 1;
+  }
+}

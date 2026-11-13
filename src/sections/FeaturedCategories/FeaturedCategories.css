@@ -4,37 +4,48 @@
 
 .featured-categories__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
+  /* minmax(0, 1fr) evita que un nombre largo ensanche su columna */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
 .featured-categories__card {
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 0.25rem;
+  gap: 0.15rem;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   padding: 1.25rem;
+  overflow: hidden;
   border: none;
   border-radius: var(--radius);
-  background-color: var(--color-green);
-  color: var(--color-navy);
+  background: linear-gradient(135deg, var(--color-green-dark), var(--color-navy));
+  color: var(--color-white);
   text-align: left;
+  box-shadow: var(--shadow-small);
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
-/* Las tarjetas alternan entre color sólido y rayado, como en el wireframe */
-.featured-categories__grid > li:nth-child(n + 3) .featured-categories__card {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--color-green-dark),
-    var(--color-green-dark) 12px,
-    var(--color-green) 12px,
-    var(--color-green) 16px
-  );
-  color: var(--color-white);
+.featured-categories__image {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Difuminado de la imagen hacia el azul marino para que el texto se lea bien */
+.featured-categories__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(17, 46, 64, 0.95) 0%, rgba(17, 46, 64, 0.55) 45%, rgba(17, 46, 64, 0.05) 100%);
 }
 
 .featured-categories__card:hover {
@@ -42,37 +53,53 @@
   box-shadow: var(--shadow);
 }
 
+.featured-categories__card:hover .featured-categories__image {
+  transform: scale(1.06);
+}
+
 .featured-categories__name {
   font-size: 1.25rem;
   font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .featured-categories__count {
+  color: var(--color-green-light);
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
 .featured-categories__icon {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  transition: transform var(--transition);
+  top: 1rem;
+  right: 1rem;
+  box-sizing: content-box;
+  padding: 0.4rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+  transition: transform var(--transition), background-color var(--transition);
 }
 
 .featured-categories__card:hover .featured-categories__icon {
-  transform: translateX(4px);
-}
-
-/* El texto sobre el fondo rayado necesita un fondo para leerse bien */
-.featured-categories__grid > li:nth-child(n + 3) .featured-categories__name,
-.featured-categories__grid > li:nth-child(n + 3) .featured-categories__count {
-  align-self: flex-start;
-  padding: 0.1rem 0.5rem;
-  border-radius: 6px;
-  background-color: var(--color-green-dark);
+  background-color: var(--color-green);
+  color: var(--color-navy);
+  transform: translateX(3px);
 }
 
 @media (max-width: 860px) {
   .featured-categories__grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .featured-categories__card {
+    aspect-ratio: 1;
+    padding: 1rem;
+  }
+
+  .featured-categories__name {
+    font-size: 1.05rem;
   }
 }

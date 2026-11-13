@@ -30,6 +30,9 @@ export default function FeaturedCategories({ categories, onSelect }) {
           {featured.map((category) => (
             <li key={category.id}>
               <button type="button" className="featured-categories__card" onClick={() => handleSelect(category.slug)}>
+                {category.imageUrl && (
+                  <img className="featured-categories__image" src={category.imageUrl} alt="" loading="lazy" />
+                )}
                 <span className="featured-categories__name">{category.name}</span>
                 <span className="featured-categories__count">
                   {category.publishedCourses} {category.publishedCourses === 1 ? 'curso' : 'cursos'}

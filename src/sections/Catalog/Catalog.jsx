@@ -1,29 +1,32 @@
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useState } from 'react';
 import CourseCard from '../../components/CourseCard/CourseCard';
+import CourseDetail from '../../components/CourseDetail/CourseDetail';
+import EnrollAction from '../../components/EnrollAction/EnrollAction';
+import BottomSheet from '../../components/BottomSheet/BottomSheet';
 import { useAuth } from '../../hooks/useAuth';
 import { useEnrollment } from '../../hooks/useEnrollment';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import './Catalog.css';
 
 /**
- * Sección llenada con la API: catálogo de cursos publicados,
- * con filtro por categoría y botón "Cargar más".
+ * Sección llenada con la API: catálogo de cursos publicados.
+ * Escritorio: lista a la izquierda y detalle del curso seleccionado a la derecha.
+ * Móvil: lista, y el detalle se abre en una hoja deslizable encima.
+ * En ambos casos el usuario no pierde su lugar en la lista.
  */
 export default function Catalog({ catalog, categories }) {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const enrollment = useEnrollment(user);
+  const isDesktop = useMediaQuery('(min-width: 960px)');
+  const [selectedId, setSelectedId] = useState(null);
 
   const { courses, category, status, error, total, hasMore, changeCategory, loadMore, retry } = catalog;
 
-  // Visitantes: el botón los lleva al login. Admin e instructor no se inscriben.
-  const canSeeEnrollButton = !user || enrollment.isStudent;
-  const handleEnroll = (course) => {
-    if (!user) {
-      navigate('/login', { state: { from: '/' } });
-      return;
-    }
-    enrollment.enrollInCourse(course);
-  };
+  // En escritorio siempre hay un curso visible en el panel: si no se ha elegido uno, el primero.
+  const selectedCourse =
+    courses.find((course) => course.id === selectedId) ?? (isDesktop ? courses[0] : null);
+
+  const closeDetail = useCallback(() => setSelectedId(null), []);
 
   const filters = [{ slug: '', name: 'Todas' }, ...categories.filter((item) => item.publishedCourses > 0)];
 
@@ -34,7 +37,7 @@ export default function Catalog({ catalog, categories }) {
           <h2 id="catalog-title" className="section__title">
             Cursos disponibles
           </h2>
-          <p className="section__subtitle">Elige una categoría y encuentra tu próximo curso.</p>
+          <p className="section__subtitle">Elige una categoría y selecciona un curso para ver su información.</p>
         </header>
 
         <div className="catalog__filters" role="group" aria-label="Filtrar por categoría">
@@ -51,15 +54,6 @@ export default function Catalog({ catalog, categories }) {
           ))}
         </div>
 
-        {enrollment.notice && (
-          <p className={`catalog__notice catalog__notice--${enrollment.notice.type}`} role="status">
-            {enrollment.notice.text}
-            <button type="button" className="catalog__notice-close" onClick={enrollment.clearNotice} aria-label="Cerrar">
-              ×
-            </button>
-          </p>
-        )}
-
         {status === 'loading' && <p className="status">Cargando cursos...</p>}
 
         {status === 'error' && (
@@ -71,43 +65,69 @@ export default function Catalog({ catalog, categories }) {
           </div>
         )}
 
-        {status !== 'loading' && status !== 'error' && courses.length === 0 && (
+        {status === 'ready' && courses.length === 0 && (
           <p className="status">Aún no hay cursos publicados en esta categoría.</p>
         )}
 
         {courses.length > 0 && (
-          <>
-            <ul className="catalog__grid">
-              {courses.map((course) => (
-                <li key={course.id}>
-                  <CourseCard
-                    course={course}
-                    onEnroll={canSeeEnrollButton ? handleEnroll : undefined}
-                    isEnrolled={enrollment.enrolledIds.has(course.id)}
-                    isEnrolling={enrollment.pendingId === course.id}
-                  />
-                </li>
-              ))}
-            </ul>
-
-            <div className="catalog__more">
+          <div className="catalog__layout">
+            <div>
               <p className="catalog__count">
-                Mostrando {courses.length} de {total} cursos
+                {total} {total === 1 ? 'curso encontrado' : 'cursos encontrados'}
               </p>
+
+              <ul className="catalog__list">
+                {courses.map((course) => (
+                  <li key={course.id}>
+                    <CourseCard
+                      course={course}
+                      isSelected={selectedCourse?.id === course.id}
+                      onSelect={() => setSelectedId(course.id)}
+                    />
+                  </li>
+                ))}
+              </ul>
+
               {hasMore && (
-                <button
-                  type="button"
-                  className="button button--primary"
-                  onClick={loadMore}
-                  disabled={status === 'loadingMore'}
-                >
-                  {status === 'loadingMore' ? 'Cargando...' : 'Cargar más'}
-                </button>
+                <div className="catalog__more">
+                  <button
+                    type="button"
+                    className="button button--dark"
+                    onClick={loadMore}
+                    disabled={status === 'loadingMore'}
+                  >
+                    {status === 'loadingMore' ? 'Cargando...' : 'Cargar más cursos'}
+                  </button>
+                  <p className="catalog__count">
+                    Mostrando {courses.length} de {total}
+                  </p>
+                </div>
               )}
             </div>
-          </>
+
+            {isDesktop && selectedCourse && (
+              // key: al cambiar de curso el panel se vuelve a montar y su scroll regresa arriba
+              <aside key={selectedCourse.id} className="catalog__detail" aria-label="Detalle del curso">
+                <CourseDetail
+                  course={selectedCourse}
+                  actions={<EnrollAction course={selectedCourse} enrollment={enrollment} />}
+                />
+              </aside>
+            )}
+          </div>
         )}
       </div>
+
+      {!isDesktop && (
+        <BottomSheet isOpen={Boolean(selectedCourse)} onClose={closeDetail} label="Detalle del curso">
+          {selectedCourse && (
+            <CourseDetail
+              course={selectedCourse}
+              actions={<EnrollAction course={selectedCourse} enrollment={enrollment} />}
+            />
+          )}
+        </BottomSheet>
+      )}
     </section>
   );
 }

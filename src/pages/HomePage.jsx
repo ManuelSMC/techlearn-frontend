@@ -3,14 +3,14 @@ import Catalog from '../sections/Catalog/Catalog';
 import FeaturedCategories from '../sections/FeaturedCategories/FeaturedCategories';
 import FeaturedInstructors from '../sections/FeaturedInstructors/FeaturedInstructors';
 import { useCatalog } from '../hooks/useCatalog';
-import { useApi } from '../hooks/useApi';
+import { useQuery } from '../hooks/useQuery';
 import { getCategories } from '../api/categories.api';
 
 export default function HomePage() {
   // El catálogo vive aquí porque dos secciones lo controlan:
   // los filtros del catálogo y las tarjetas de categorías destacadas.
   const catalog = useCatalog();
-  const { data: categories } = useApi(getCategories);
+  const { data: categories } = useQuery(getCategories);
 
   return (
     <main>

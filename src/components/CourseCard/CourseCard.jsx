@@ -2,53 +2,47 @@ import { BookOpen, Users } from 'lucide-react';
 import { formatPrice, LEVEL_LABELS } from '../../utils/format';
 import './CourseCard.css';
 
-/**
- * Tarjeta de un curso del catálogo.
- * El botón de inscripción es opcional: solo se muestra si se recibe onEnroll.
- */
-export default function CourseCard({ course, onEnroll, isEnrolled = false, isEnrolling = false }) {
+/** Tarjeta compacta de la lista del catálogo. Al seleccionarla se muestra su detalle. */
+export default function CourseCard({ course, isSelected = false, onSelect }) {
   return (
-    <article className="course-card">
+    <article className={`course-card ${isSelected ? 'course-card--selected' : ''}`}>
       <div className="course-card__media">
         {course.imageUrl ? (
           <img className="course-card__image" src={course.imageUrl} alt="" loading="lazy" />
         ) : (
-          <BookOpen className="course-card__placeholder" size={48} aria-hidden="true" />
+          <BookOpen className="course-card__placeholder" size={28} aria-hidden="true" />
         )}
       </div>
 
       <div className="course-card__body">
         <div className="course-card__tags">
-          <span className="course-card__tag">{course.category.name}</span>
-          <span className="course-card__level">{LEVEL_LABELS[course.level]}</span>
+          <span className="chip">{course.category.name}</span>
+          <span className="chip chip--muted">{LEVEL_LABELS[course.level]}</span>
         </div>
 
-        <h3 className="course-card__title">{course.title}</h3>
-        <p className="course-card__description">{course.description}</p>
-        <p className="course-card__instructor">Por {course.instructor.name}</p>
-      </div>
-
-      <footer className="course-card__footer">
-        <span className={`course-card__price ${course.isFree ? 'course-card__price--free' : ''}`}>
-          {formatPrice(course.price)}
-        </span>
-
-        <span className="course-card__students" title="Estudiantes inscritos">
-          <Users size={16} aria-hidden="true" />
-          {course.studentsCount}
-        </span>
-
-        {onEnroll && (
+        <h3 className="course-card__title">
+          {/* El botón cubre toda la tarjeta (ver ::after en el CSS) */}
           <button
             type="button"
-            className="button button--primary button--small course-card__action"
-            onClick={() => onEnroll(course)}
-            disabled={isEnrolled || isEnrolling}
+            className="course-card__select"
+            onClick={() => onSelect(course)}
+            aria-pressed={isSelected}
           >
-            {isEnrolled ? 'Inscrito' : isEnrolling ? 'Inscribiendo...' : 'Inscribirme'}
+            {course.title}
           </button>
-        )}
-      </footer>
+        </h3>
+        <p className="course-card__instructor">{course.instructor.name}</p>
+
+        <div className="course-card__footer">
+          <span className={`course-card__price ${course.isFree ? 'course-card__price--free' : ''}`}>
+            {formatPrice(course.price)}
+          </span>
+          <span className="course-card__students" title="Estudiantes inscritos">
+            <Users size={14} aria-hidden="true" />
+            {course.studentsCount}
+          </span>
+        </div>
+      </div>
     </article>
   );
 }

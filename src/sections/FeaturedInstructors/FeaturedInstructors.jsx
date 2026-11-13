@@ -1,13 +1,13 @@
-import { useApi } from '../../hooks/useApi';
+import { useQuery } from '../../hooks/useQuery';
 import { getInstructors } from '../../api/instructors.api';
 import { getInitials } from '../../utils/format';
 import './FeaturedInstructors.css';
 
 /** Instructores con más cursos publicados (la API devuelve los 3 principales). */
 export default function FeaturedInstructors() {
-  const { data: instructors, status } = useApi(getInstructors);
+  const { data: instructors } = useQuery(getInstructors);
 
-  if (status !== 'success' || instructors.length === 0) return null;
+  if (!instructors || instructors.length === 0) return null;
 
   return (
     <section id="instructores" className="section featured-instructors" aria-labelledby="instructors-title">
