@@ -5,9 +5,9 @@ import './CourseDetail.css';
 /**
  * Información completa de un curso. Se usa en el catálogo (panel derecho o hoja deslizable),
  * en "Mis cursos" y en los paneles. Los botones de acción se reciben en "actions"
- * porque cambian según la pantalla.
+ * porque cambian según la pantalla. Con onInstructorClick aparece "Ver perfil".
  */
-export default function CourseDetail({ course, actions }) {
+export default function CourseDetail({ course, actions, onInstructorClick }) {
   return (
     <article className="course-detail" aria-labelledby={`course-${course.id}-title`}>
       <div className="course-detail__media">
@@ -40,6 +40,15 @@ export default function CourseDetail({ course, actions }) {
             <p className="course-detail__label">Instructor</p>
             <p className="course-detail__instructor-name">{course.instructor.name}</p>
           </div>
+          {onInstructorClick && (
+            <button
+              type="button"
+              className="button button--outline button--small course-detail__profile"
+              onClick={() => onInstructorClick(course.instructor)}
+            >
+              Ver perfil
+            </button>
+          )}
         </div>
 
         <ul className="course-detail__stats">

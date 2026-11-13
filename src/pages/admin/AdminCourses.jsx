@@ -4,6 +4,7 @@ import { deleteCourse, getAllCourses, restoreCourse, setCourseStatus } from '../
 import StudentsModal from '../../components/StudentsList/StudentsModal';
 import DetailDialog from '../../components/DetailDialog/DetailDialog';
 import CourseDetailLoader from '../../components/DetailDialog/CourseDetailLoader';
+import InstructorProfileView from '../../components/InstructorProfile/InstructorProfileView';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import Pagination from '../../components/Pagination/Pagination';
 import { CourseStatusBadge } from '../../components/StatusBadge/StatusBadge';
@@ -18,15 +19,35 @@ const STATUS_OPTIONS = [
   { value: 'hidden', label: 'Oculto' },
 ];
 
+// Opciones del filtro "Estado" y los parámetros que se mandan a la API por cada una
+const VIEW_FILTERS = [
+  { value: '', label: 'Activos (todos los estados)', params: {} },
+  ...STATUS_OPTIONS.map((option) => ({ ...option, params: { status: option.value } })),
+  { value: 'inactive', label: 'Dados de baja', params: { onlyInactive: true } },
+  { value: 'all', label: 'Todos, incluidos dados de baja', params: { includeInactive: true } },
+];
+
 /** Moderación de cursos: publicar, ocultar, dar de baja y reactivar. */
 export default function AdminCourses({ initialStatus = '' }) {
-  const [filters, setFilters] = useState({ status: initialStatus, search: '', includeInactive: false, page: 1 });
-  const { data: courses, meta, error, isLoading, reload } = useQuery(getAllCourses, { ...filters, limit: 10 });
+  const [filters, setFilters] = useState({ view: initialStatus, search: '', page: 1 });
+  const viewParams = VIEW_FILTERS.find((option) => option.value === filters.view)?.params ?? {};
+  const { data: courses, meta, error, isLoading, reload } = useQuery(getAllCourses, {
+    ...viewParams,
+    search: filters.search,
+    page: filters.page,
+    limit: 10,
+  });
   const toast = useToast();
   const confirm = useConfirm();
 
   const [dialog, setDialog] = useState(null);
-  const closeDialog = useCallback(() => setDialog(null), []);
+  // Perfil del instructor abierto junto al detalle del curso
+  const [profileId, setProfileId] = useState(null);
+  const closeDialog = useCallback(() => {
+    setDialog(null);
+    setProfileId(null);
+  }, []);
+  const closeProfile = useCallback(() => setProfileId(null), []);
 
   // Al cambiar un filtro se regresa a la primera página.
   const updateFilter = (changes) => setFilters((current) => ({ ...current, ...changes, page: 1 }));
@@ -104,24 +125,15 @@ export default function AdminCourses({ initialStatus = '' }) {
         <select
           className="form__input toolbar__select"
           aria-label="Filtrar por estado"
-          value={filters.status}
-          onChange={(event) => updateFilter({ status: event.target.value })}
+          value={filters.view}
+          onChange={(event) => updateFilter({ view: event.target.value })}
         >
-          <option value="">Todos los estados</option>
-          {STATUS_OPTIONS.map((option) => (
+          {VIEW_FILTERS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
         </select>
-        <label className="toolbar__check">
-          <input
-            type="checkbox"
-            checked={filters.includeInactive}
-            onChange={(event) => updateFilter({ includeInactive: event.target.checked })}
-          />
-          Incluir dados de baja
-        </label>
         {isLoading && courses && <span className="toolbar__loading">Actualizando...</span>}
       </div>
 
@@ -214,8 +226,21 @@ export default function AdminCourses({ initialStatus = '' }) {
       )}
 
       {dialog?.type === 'students' && <StudentsModal course={dialog.course} onClose={closeDialog} />}
-      <DetailDialog isOpen={dialog?.type === 'detail'} onClose={closeDialog} label="Detalle del curso">
-        {dialog?.type === 'detail' && <CourseDetailLoader courseId={dialog.course.id} actions={renderReviewActions} />}
+      <DetailDialog
+        isOpen={dialog?.type === 'detail'}
+        onClose={closeDialog}
+        label="Detalle del curso"
+        aside={profileId && <InstructorProfileView key={profileId} instructorId={profileId} />}
+        asideLabel="Perfil del instructor"
+        onAsideClose={closeProfile}
+      >
+        {dialog?.type === 'detail' && (
+          <CourseDetailLoader
+            courseId={dialog.course.id}
+            actions={renderReviewActions}
+            onInstructorClick={(instructor) => setProfileId(instructor.id)}
+          />
+        )}
       </DetailDialog>
     </section>
   );

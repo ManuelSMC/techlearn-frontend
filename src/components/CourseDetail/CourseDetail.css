@@ -60,6 +60,10 @@
   object-fit: cover;
 }
 
+.course-detail__profile {
+  margin-left: auto;
+}
+
 .course-detail__label {
   display: block;
   color: var(--color-text-muted);

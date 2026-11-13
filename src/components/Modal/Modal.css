@@ -14,6 +14,16 @@
   animation: modal-fade 0.2s ease;
 }
 
+/* Contenedor de los paneles: uno solo, o el principal + el lateral */
+.modal__group {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1360px;
+}
+
 .modal__panel {
   position: relative;
   display: flex;
@@ -73,6 +83,33 @@
   overflow-y: auto;
 }
 
+/* Con panel lateral: el principal se recorre a la izquierda y el perfil aparece a la derecha */
+.modal--with-aside .modal__panel--large {
+  flex: 1 1 58%;
+  max-width: 780px;
+}
+
+.modal__panel--aside {
+  flex: 1 1 42%;
+  max-width: 540px;
+  animation: modal-aside-in 0.3s ease;
+}
+
+.modal__body--flush {
+  padding: 0;
+}
+
+@keyframes modal-aside-in {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Cuando el contenido ya trae su propio diseño (como el detalle de un curso) */
 .modal__body:has(> .course-detail),
 .modal__body:has(> .detail-loader) {
@@ -111,11 +148,24 @@
   }
 }
 
+/* Si no caben lado a lado, el panel lateral se muestra encima del principal */
+@media (max-width: 959px) {
+  .modal--with-aside .modal__panel--aside {
+    position: absolute;
+    inset: 0;
+    max-width: none;
+  }
+}
+
 /* En móvil la ventana sale desde abajo, como una hoja */
 @media (max-width: 600px) {
   .modal {
     place-items: end stretch;
     padding: 0;
+  }
+
+  .modal__group {
+    align-self: end;
   }
 
   .modal__panel {
