@@ -1,0 +1,179 @@
+/*
+ * Estilos globales de TechLearn.
+ * Metodología CSS: BEM (bloque__elemento--modificador).
+ * Cada componente tiene su propio archivo .css junto a su .jsx.
+ */
+
+:root {
+  /* Paleta del documento de Turing-IA */
+  --color-navy: #112e40;
+  --color-gray: #c8d3d9;
+  --color-green-dark: #025949;
+  --color-green: #1fbf92;
+  --color-green-light: #6cd9ba;
+
+  --color-white: #ffffff;
+  --color-text: #112e40;
+  --color-text-muted: #4a6072;
+  --color-error: #c0392b;
+  --color-surface: #f4f7f8;
+
+  --font-family: 'Segoe UI', system-ui, Roboto, sans-serif;
+  --radius: 10px;
+  --shadow: 0 6px 18px rgba(17, 46, 64, 0.12);
+  --container: 1120px;
+  --transition: 0.2s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-gray);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-green);
+  outline-offset: 2px;
+}
+
+/* Contenedor centrado reutilizable */
+.container {
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+}
+
+/* Bloque: button */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.button--primary {
+  background-color: var(--color-green);
+  color: var(--color-navy);
+}
+
+.button--primary:hover {
+  background-color: var(--color-green-light);
+}
+
+.button--outline {
+  background-color: transparent;
+  border-color: var(--color-green);
+  color: var(--color-green-dark);
+}
+
+.button--outline:hover {
+  background-color: var(--color-green);
+  color: var(--color-navy);
+}
+
+.button--small {
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Bloque: section (estructura común de las secciones de la página) */
+.section {
+  padding-block: 4rem;
+  /* Al saltar con los enlaces del menú, el header fijo no tapa el título */
+  scroll-margin-top: 80px;
+}
+
+.section__header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.section__title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+/* Línea verde bajo el título, como en el wireframe */
+.section__title::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 4px;
+  margin: 0.75rem auto 0;
+  border-radius: 2px;
+  background-color: var(--color-green);
+}
+
+.section__subtitle {
+  margin-top: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* Bloque: status (mensajes de carga, vacío y error) */
+.status {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.status--error {
+  color: var(--color-error);
+}
+
+/* Solo para lectores de pantalla */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

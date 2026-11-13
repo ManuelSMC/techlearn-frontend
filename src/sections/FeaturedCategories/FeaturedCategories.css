@@ -1,0 +1,78 @@
+.featured-categories {
+  background-color: var(--color-white);
+}
+
+.featured-categories__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.featured-categories__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 1.25rem;
+  border: none;
+  border-radius: var(--radius);
+  background-color: var(--color-green);
+  color: var(--color-navy);
+  text-align: left;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+/* Las tarjetas alternan entre color sólido y rayado, como en el wireframe */
+.featured-categories__grid > li:nth-child(n + 3) .featured-categories__card {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-green-dark),
+    var(--color-green-dark) 12px,
+    var(--color-green) 12px,
+    var(--color-green) 16px
+  );
+  color: var(--color-white);
+}
+
+.featured-categories__card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.featured-categories__name {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.featured-categories__count {
+  font-weight: 600;
+}
+
+.featured-categories__icon {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  transition: transform var(--transition);
+}
+
+.featured-categories__card:hover .featured-categories__icon {
+  transform: translateX(4px);
+}
+
+/* El texto sobre el fondo rayado necesita un fondo para leerse bien */
+.featured-categories__grid > li:nth-child(n + 3) .featured-categories__name,
+.featured-categories__grid > li:nth-child(n + 3) .featured-categories__count {
+  align-self: flex-start;
+  padding: 0.1rem 0.5rem;
+  border-radius: 6px;
+  background-color: var(--color-green-dark);
+}
+
+@media (max-width: 860px) {
+  .featured-categories__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
