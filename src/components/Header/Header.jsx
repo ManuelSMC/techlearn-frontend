@@ -27,7 +27,8 @@ export default function Header() {
   const handleLogout = () => {
     logout();
     closeMenu();
-    navigate('/');
+    // replace: al presionar "atrás" no se regresa a una pantalla de la sesión que ya se cerró
+    navigate('/login', { replace: true });
   };
 
   const panel = user ? PANEL_BY_ROLE[user.role] : null;
