@@ -1,7 +1,8 @@
 import { request } from './client';
 
 // Público
-export const getInstructors = () => request('/instructors');
+export const getInstructors = (params) => request('/instructors', { params });
+export const getInstructor = (id) => request(`/instructors/${id}`);
 
 // Instructor
 export const getMyProfile = () => request('/instructors/me');

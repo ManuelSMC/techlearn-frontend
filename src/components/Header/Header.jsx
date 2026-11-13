@@ -7,7 +7,7 @@ import './Header.css';
 const NAV_LINKS = [
   { href: '/#cursos', label: 'Cursos' },
   { href: '/#categorias', label: 'Categorías' },
-  { href: '/#instructores', label: 'Instructores' },
+  { to: '/instructores', label: 'Instructores' },
 ];
 
 // Cada rol tiene su propia sección privada.
@@ -72,10 +72,16 @@ export default function Header() {
         <nav id="main-nav" className={`header__nav ${isMenuOpen ? 'header__nav--open' : ''}`} aria-label="Principal">
           <ul className="header__links">
             {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a className="header__link" href={link.href} onClick={closeMenu}>
-                  {link.label}
-                </a>
+              <li key={link.label}>
+                {link.to ? (
+                  <NavLink className="header__link" to={link.to} onClick={closeMenu}>
+                    {link.label}
+                  </NavLink>
+                ) : (
+                  <a className="header__link" href={link.href} onClick={closeMenu}>
+                    {link.label}
+                  </a>
+                )}
               </li>
             ))}
             {panel && (

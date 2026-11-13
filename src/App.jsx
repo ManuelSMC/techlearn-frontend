@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import HomePage from './pages/HomePage';
+import InstructorsPage from './pages/InstructorsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MyCoursesPage from './pages/MyCoursesPage';
@@ -14,6 +15,7 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/instructores" element={<InstructorsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegisterPage />} />
 

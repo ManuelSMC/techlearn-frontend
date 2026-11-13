@@ -8,7 +8,7 @@ const FOOTER_COLUMNS = [
     links: [
       { href: '/#cursos', label: 'Cursos' },
       { href: '/#categorias', label: 'Categorías' },
-      { href: '/#instructores', label: 'Instructores' },
+      { to: '/instructores', label: 'Instructores' },
     ],
   },
   {

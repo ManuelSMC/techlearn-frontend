@@ -8,6 +8,7 @@ import { useQuery } from '../hooks/useQuery';
 import { useToast } from '../hooks/useToast';
 import { useConfirm } from '../hooks/useConfirm';
 import { formatPrice, LEVEL_LABELS } from '../utils/format';
+import '../components/StatusBadge/StatusBadge.css';
 import './MyCoursesPage.css';
 
 const dateFormatter = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium' });
@@ -59,8 +60,11 @@ export default function MyCoursesPage() {
     }
   };
 
-  const renderActionButton = (item) =>
-    item.status === 'cancelled' ? (
+  const renderActionButton = (item) => {
+    // Si el curso salió del catálogo, ya no se puede volver a inscribir; sí se puede cancelar.
+    const canReenroll = item.course.isActive && item.course.status === 'published';
+    if (item.status === 'cancelled' && !canReenroll) return null;
+    return item.status === 'cancelled' ? (
       <button
         type="button"
         className="button button--primary button--small"
@@ -79,6 +83,7 @@ export default function MyCoursesPage() {
         Cancelar inscripción
       </button>
     );
+  };
 
   const list = enrollments ?? [];
   const active = list.filter((item) => item.status === 'active');
@@ -95,17 +100,28 @@ export default function MyCoursesPage() {
           <div className="enrollment__tags">
             <span className="chip">{course.categoryName}</span>
             <span className="chip chip--muted">{LEVEL_LABELS[course.level]}</span>
+            {!course.isActive && <span className="status-badge status-badge--danger">No disponible</span>}
+            {course.isActive && course.status !== 'published' && (
+              <span className="status-badge status-badge--muted">Fuera del catálogo</span>
+            )}
           </div>
           <h3 className="enrollment__title">{course.title}</h3>
           <p className="enrollment__meta">
             {course.instructorName} · {formatPrice(course.price)} · Inscrito el{' '}
             {dateFormatter.format(new Date(item.enrolledAt))}
           </p>
+          {!course.isActive && (
+            <p className="enrollment__notice">
+              Este curso fue dado de baja por la plataforma. Tu inscripción se conserva en tu historial.
+            </p>
+          )}
         </div>
         <div className="enrollment__actions">
-          <button type="button" className="button button--ghost button--small" onClick={() => setDetailItem(item)}>
-            Ver detalle
-          </button>
+          {course.isActive && (
+            <button type="button" className="button button--ghost button--small" onClick={() => setDetailItem(item)}>
+              Ver detalle
+            </button>
+          )}
           {renderActionButton(item)}
         </div>
       </li>

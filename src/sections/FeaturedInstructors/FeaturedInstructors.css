@@ -12,7 +12,33 @@
   align-items: center;
   gap: 0.35rem;
   width: 220px;
+  padding: 1.25rem 1rem;
+  border-radius: var(--radius);
   text-align: center;
+  transition: background-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.featured-instructors__item:hover {
+  background-color: var(--color-white);
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
+}
+
+.featured-instructors__link {
+  margin-top: 0.35rem;
+  color: var(--color-green-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.featured-instructors__item:hover .featured-instructors__link {
+  text-decoration: underline;
+}
+
+.featured-instructors__more {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .featured-instructors__photo {
@@ -38,7 +64,7 @@
 
 /* El instructor del centro se muestra más grande, como en el wireframe */
 @media (min-width: 761px) {
-  .featured-instructors__item:nth-child(2) .featured-instructors__photo {
+  .featured-instructors__list > li:nth-child(2) .featured-instructors__photo {
     width: 180px;
     height: 180px;
   }

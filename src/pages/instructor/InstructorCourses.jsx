@@ -32,7 +32,11 @@ export default function InstructorCourses() {
   const handleDelete = async (course) => {
     const confirmed = await confirm({
       title: 'Dar de baja el curso',
-      message: `"${course.title}" dejará de mostrarse en el catálogo. Solo el administrador podrá reactivarlo.`,
+      message:
+        `"${course.title}" dejará de mostrarse en el catálogo. Solo el administrador podrá reactivarlo.` +
+        (course.studentsCount > 0
+          ? ` Tiene ${course.studentsCount} ${course.studentsCount === 1 ? 'estudiante inscrito' : 'estudiantes inscritos'}: conservarán su inscripción en el historial, pero ya no podrán ver el contenido.`
+          : ''),
       confirmLabel: 'Dar de baja',
       tone: 'danger',
     });

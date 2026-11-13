@@ -61,6 +61,12 @@
   font-size: 0.85rem;
 }
 
+.enrollment__notice {
+  color: var(--color-error);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .enrollment__actions {
   display: flex;
   flex-wrap: wrap;
