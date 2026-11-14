@@ -68,6 +68,7 @@ En Vite, las variables deben empezar con `VITE_` para que estén disponibles en 
 - **Vista lista + detalle**: en escritorio, el detalle del curso aparece a la derecha sin salir de la lista; en móvil, se abre en una hoja deslizable que se cierra arrastrándola hacia abajo.
 - **Directorio de instructores** (`/instructores`) con buscador y perfil: especialidad, biografía, estadísticas y cursos publicados.
 - **Registro e inicio de sesión**, con los errores de validación de la API mostrados en cada campo.
+- **Imágenes desde el dispositivo**: portadas de cursos, categorías y fotos de perfil se suben desde la computadora o el celular, con vista previa y validación de formato y tamaño.
 
 ### Estudiante (`/mis-cursos`)
 
@@ -160,7 +161,6 @@ La paleta del documento de Turing-IA está definida como variables en `src/style
 
 ## Mejoras futuras
 
-- Subida de imágenes con Cloudinary en lugar de pegar URLs.
 - Pruebas de componentes con Vitest y React Testing Library.
 - Lecciones y seguimiento del progreso dentro de cada curso.
 - Pasarela de pago real para los cursos de pago.

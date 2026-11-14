@@ -3,6 +3,7 @@ import { UserPlus } from 'lucide-react';
 import { createInstructor, getUsers, setUserStatus } from '../../api/admin.api';
 import Modal from '../../components/Modal/Modal';
 import FormField from '../../components/FormField/FormField';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import Pagination from '../../components/Pagination/Pagination';
 import { ActiveBadge } from '../../components/StatusBadge/StatusBadge';
@@ -224,7 +225,14 @@ function InstructorFormModal({ onClose, onSaved }) {
         />
         <FormField id="specialty" label="Especialidad (opcional)" value={form.specialty} onChange={handleChange} error={fieldErrors.specialty} />
         <FormField id="bio" label="Biografía (opcional)" as="textarea" rows={3} value={form.bio} onChange={handleChange} error={fieldErrors.bio} />
-        <FormField id="photoUrl" label="URL de la foto (opcional)" type="url" value={form.photoUrl} onChange={handleChange} error={fieldErrors.photoUrl} />
+        <ImageUpload
+          label="Foto (opcional)"
+          folder="instructors"
+          shape="round"
+          value={form.photoUrl}
+          onChange={(photoUrl) => setForm((current) => ({ ...current, photoUrl }))}
+          error={fieldErrors.photoUrl}
+        />
       </form>
     </Modal>
   );

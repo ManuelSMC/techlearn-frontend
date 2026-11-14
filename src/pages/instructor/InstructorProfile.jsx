@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { getMyProfile, updateMyProfile } from '../../api/instructors.api';
 import FormField from '../../components/FormField/FormField';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import { useQuery } from '../../hooks/useQuery';
 import { useToast } from '../../hooks/useToast';
 import { getFieldErrors } from '../../utils/errors';
@@ -91,13 +92,12 @@ function ProfileForm({ profile, onSaved }) {
             error={fieldErrors.bio}
             hint="Cuéntale a tus estudiantes sobre tu experiencia."
           />
-          <FormField
-            id="photoUrl"
-            label="URL de tu foto"
-            type="url"
-            placeholder="https://..."
+          <ImageUpload
+            label="Tu foto"
+            folder="instructors"
+            shape="round"
             value={form.photoUrl}
-            onChange={handleChange}
+            onChange={(photoUrl) => setForm((current) => ({ ...current, photoUrl }))}
             error={fieldErrors.photoUrl}
           />
           <div>

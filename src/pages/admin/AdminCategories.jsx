@@ -9,6 +9,7 @@ import {
 } from '../../api/categories.api';
 import Modal from '../../components/Modal/Modal';
 import FormField from '../../components/FormField/FormField';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import { ActiveBadge } from '../../components/StatusBadge/StatusBadge';
 import { useQuery } from '../../hooks/useQuery';
 import { useToast } from '../../hooks/useToast';
@@ -209,13 +210,11 @@ function CategoryFormModal({ category, onClose, onSaved }) {
           onChange={handleChange}
           error={fieldErrors.description}
         />
-        <FormField
-          id="imageUrl"
-          label="URL de la imagen"
-          type="url"
-          placeholder="https://..."
+        <ImageUpload
+          label="Imagen de la categoría"
+          folder="categories"
           value={form.imageUrl}
-          onChange={handleChange}
+          onChange={(imageUrl) => setForm((current) => ({ ...current, imageUrl }))}
           error={fieldErrors.imageUrl}
         />
       </form>

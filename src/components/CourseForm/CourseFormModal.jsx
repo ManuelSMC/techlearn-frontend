@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from '../Modal/Modal';
 import FormField from '../FormField/FormField';
+import ImageUpload from '../ImageUpload/ImageUpload';
 import { useQuery } from '../../hooks/useQuery';
 import { useToast } from '../../hooks/useToast';
 import { getCategories } from '../../api/categories.api';
@@ -136,18 +137,13 @@ export default function CourseFormModal({ course, onClose, onSaved }) {
         </div>
 
         <div className="course-form__side">
-          <FormField
-            id="imageUrl"
-            label="URL de la imagen"
-            type="url"
-            placeholder="https://..."
+          <ImageUpload
+            label="Portada del curso"
+            folder="courses"
             value={form.imageUrl}
-            onChange={handleChange}
+            onChange={(imageUrl) => setForm((current) => ({ ...current, imageUrl }))}
             error={fieldErrors.imageUrl}
           />
-          <div className="course-form__preview">
-            {form.imageUrl ? <img src={form.imageUrl} alt="Vista previa" /> : <span>Vista previa de la imagen</span>}
-          </div>
         </div>
       </form>
     </Modal>
